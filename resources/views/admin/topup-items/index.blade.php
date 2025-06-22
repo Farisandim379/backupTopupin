@@ -9,7 +9,36 @@
 @endsection
 
 @section('content')
-    <div class="overflow-x-auto">
+    <div class="space-y-4 md:hidden"> {{-- Show on small screens only --}}
+        @forelse ($topupItems as $item)
+            <div class="bg-[#242424] text-gray-300 p-4 rounded-lg shadow">
+                <div class="flex items-center gap-3 mb-3">
+                    <img src="{{ asset('assets/logogame/' . $item->game->thumbnail) }}" alt="{{ $item->game->name }}" class="w-12 h-12 rounded object-cover">
+                    <span class="font-bold text-lg">{{ $item->game->name }}</span>
+                </div>
+                <div class="border-t border-gray-700 pt-3">
+                    <p class="text-gray-400">Nama Item:</p>
+                    <p class="font-semibold mb-2">{{ $item->name }}</p>
+                    <p class="text-gray-400">Harga:</p>
+                    <p class="font-semibold mb-3">Rp{{ number_format($item->price, 0, ',', '.') }}</p>
+                    <div class="flex justify-end items-center gap-3">
+                        <a href="{{ route('admin.topup-items.edit', $item->id) }}" class="text-blue-400 hover:text-blue-300">Edit</a>
+                        <form action="{{ route('admin.topup-items.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus item ini?');">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="text-red-400 hover:text-red-300">Hapus</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        @empty
+            <div class="p-3 text-center text-gray-400 bg-[#242424] rounded-lg">
+                Belum ada data item top up.
+            </div>
+        @endforelse
+    </div>
+
+    <div class="overflow-x-auto hidden md:block"> {{-- Hide on small screens, show on medium and larger --}}
         <table class="min-w-full text-sm">
             <thead class="bg-[#242424] text-gray-300">
                 <tr>

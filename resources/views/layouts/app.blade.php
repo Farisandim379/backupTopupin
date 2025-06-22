@@ -18,15 +18,12 @@
 </head>
 <body class="bg-black text-white font-sans">
 
-    <!-- Navbar -->
     <nav class="bg-[#242424] p-3 border-b border-gray-800 text-white fixed top-0 w-full z-50">
         <div class="flex justify-between items-center px-4 sm:px-6 lg:px-8">
-            <!-- Logo -->
             <div class="text-lg font-bold">
                 <a href="{{ route('home') }}">Topup<span class="text-[#D7FD52]">in</span></a>
             </div>
 
-            <!-- Desktop Menu -->
             <div class="hidden md:flex items-center space-x-2">
                 <div class="relative">
                     <input type="text" class="bg-gray-700 text-gray-300 rounded-md px-3 py-2 w-48 focus:outline-none" placeholder="Search..." />
@@ -49,40 +46,79 @@
                 @endguest
             </div>
 
-            <!-- Burger Button (Mobile) -->
-            <button class="md:hidden block focus:outline-none" aria-label="Open main menu" onclick="toggleDropdown()">
-                <i class="fas fa-bars text-xl"></i>
+            <button id="burgerBtn" class="md:hidden block focus:outline-none" aria-label="Open main menu"> <i class="fas fa-bars text-xl"></i>
             </button>
         </div>
     </nav>
 
-    <!-- Mobile Dropdown Menu -->
-    <div id="dropdownMenu" class="fixed top-16 left-0 w-full bg-[#242424] text-white z-40 hidden animate-slide-down">
-      <div class="flex flex-col px-6 py-4 space-y-4 border-t border-gray-700">
-        {{-- Konten dropdown mobile --}}
+    <div id="dropdownMenu" class="fixed top-[60px] left-0 w-full bg-[#242424] text-white z-50 hidden animate-slide-down">
+      <div class="flex flex-col px-4 py-4 space-y-2 border-t border-gray-700">
+          <div class="relative w-full mb-2">
+              <input type="text" class="bg-gray-700 text-gray-300 rounded-md px-3 py-2 w-full focus:outline-none" placeholder="Cari game atau produk..." />
+              <button class="absolute right-3 top-1/2 transform -translate-y-1/2">
+                  <i class="fas fa-search text-gray-400"></i>
+              </button>
+          </div>
+
+          <a href="#" class="flex items-center gap-3 px-3 py-3 rounded-md hover:bg-gray-700/50 hover:text-[#D7FD52] transition-colors duration-300">
+              <i class="fas fa-box w-5"></i>
+              <span>Lacak Pesanan</span>
+          </a>
+          @guest
+              <a href="{{ route('login') }}" class="flex items-center gap-3 px-3 py-3 rounded-md hover:bg-gray-700/50 hover:text-[#D7FD52] transition-colors duration-300">
+                  <i class="fas fa-sign-in-alt w-5"></i>
+                  <span>Login</span>
+              </a>
+              <a href="{{ route('register') }}" class="flex items-center gap-3 px-3 py-3 rounded-md hover:bg-gray-700/50 hover:text-[#D7FD52] transition-colors duration-300">
+                  <i class="fas fa-user-plus w-5"></i>
+                  <span>Daftar</span>
+              </a>
+          @else
+              <a href="#" class="flex items-center gap-3 px-3 py-3 rounded-md hover:bg-gray-700/50 hover:text-[#D7FD52] transition-colors duration-300">
+                  <i class="fas fa-user w-5"></i>
+                  <span>{{ Auth::user()->name }}</span>
+              </a>
+              <form method="POST" action="{{ route('logout') }}" class="w-full">
+                  @csrf
+                  <button type="submit" class="w-full flex items-center gap-3 px-3 py-3 rounded-md hover:bg-gray-700/50 hover:text-[#D7FD52] transition-colors duration-300 text-left">
+                      <i class="fas fa-sign-out-alt w-5"></i>
+                      <span>Logout</span>
+                  </button>
+              </form>
+          @endguest
       </div>
     </div>
 
-    <!-- Main Content -->
-    <main class="mt-20">
-        @yield('content')
+
+    <main class="mt-20 px-4"> @yield('content')
     </main>
 
-    <!-- Footer -->
     <footer class="bg-[#242424] mt-10 w-full">
-      {{-- ... Konten Footer ... --}}
+      <div class="text-center p-4">
+        &copy; {{ date('Y') }} Topupin. All Rights Reserved.
+      </div>
     </footer>
 
     {{-- SweetAlert2 Library --}}
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
-      function toggleDropdown() {
-        const menu = document.getElementById("dropdownMenu");
-        menu.classList.toggle("hidden");
-      }
+      // DIUBAH: Script toggle dropdown dipindahkan ke event listener agar lebih rapi dan fungsional
+      const burgerBtn = document.getElementById('burgerBtn');
+      const menu = document.getElementById('dropdownMenu');
 
-      // DIUBAH: Menambahkan script untuk menampilkan notifikasi sukses
+      burgerBtn.addEventListener('click', (event) => {
+        event.stopPropagation(); // Mencegah event "click" menyebar ke window
+        menu.classList.toggle('hidden');
+      });
+
+      // Bonus: Menutup dropdown saat klik di luar area menu
+      window.addEventListener('click', (e) => {
+        if (!menu.classList.contains('hidden') && !menu.contains(e.target)) {
+          menu.classList.add('hidden');
+        }
+      });
+
       @if(session('success'))
         Swal.fire({
             icon: 'success',
@@ -94,7 +130,6 @@
         });
       @endif
 
-      // Menampilkan notifikasi error jika ada
       @if(session('error'))
         Swal.fire({
             icon: 'error',

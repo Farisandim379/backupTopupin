@@ -2,6 +2,18 @@
 
 @section('title', 'Home - Top Up Game Murah dan Cepat')
 
+@push('styles')
+<style>
+    .developer-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .developer-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(215, 253, 82, 0.15);
+    }
+</style>
+@endpush
+
 @section('content')
 
 {{-- Wrapper untuk memberi jarak dari navbar --}}
@@ -76,7 +88,7 @@
                     </div>
                     <div class="p-5 text-center">
                         <h3 class="text-white text-xl font-semibold mb-1 transition-colors duration-300 group-hover:text-[#D7FD52]">Nafal Lauza Hafidz A</h3>
-                        <p class="text-gray-400 text-sm">Frontend Developer>
+                        <p class="text-gray-400 text-sm">Frontend Developer</p>
                     </div>
                 </div>
                 <!-- Team Member 4 -->
@@ -101,7 +113,8 @@
                     </div>
                     <div class="p-5 text-center">
                         <h3 class="text-white text-xl font-semibold mb-1 transition-colors duration-300 group-hover:text-[#D7FD52]">Hafidz Ar Rofi</h3>
-                        <p class="text-gray-400 text-sm">Frontend Developer                   </div>
+                        <p class="text-gray-400 text-sm">Frontend Developer</p>
+                    </div>
                 </div>
                 <!-- Team Member 6 -->
                 <div class="group developer-card bg-[#242424] rounded-2xl overflow-hidden border border-gray-700/50 transition-all duration-300 hover:shadow-xl hover:shadow-[#D7FD52]/10 hover:border-[#D7FD52]/50 hover:-translate-y-2">
@@ -111,7 +124,7 @@
                     </div>
                     <div class="p-5 text-center">
                         <h3 class="text-white text-xl font-semibold mb-1 transition-colors duration-300 group-hover:text-[#D7FD52]">Ekananda Naufal Arif W</h3>
-                        <p class="text-gray-400 text-sm">Frontend Developerp>
+                        <p class="text-gray-400 text-sm">Frontend Developer</p>
                     </div>
                 </div>
             </div>
@@ -153,7 +166,16 @@
     </div>
 </div>
 
-{{-- ... Pop Up Iklan Anda di sini ... --}}
+{{-- DITAMBAHKAN KEMBALI: Popup Notifikasi Promo --}}
+<div id="promo-popup" class="fixed inset-0 bg-black/70 flex items-center justify-center z-50 transition-opacity duration-300">
+    <div class="relative max-w-md mx-4">
+        <img src="{{ asset('assets/promo/promo.png') }}" class="rounded-lg shadow-lg" alt="Iklan Promo">
+        <button onclick="document.getElementById('promo-popup').style.display='none'"
+                class="absolute -top-2 -right-2 bg-white text-black rounded-full w-8 h-8 flex items-center justify-center font-bold text-lg hover:bg-gray-200 transition-transform hover:scale-110">
+            ✕
+        </button>
+    </div>
+</div>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -187,8 +209,20 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Set 'semua' sebagai default aktif saat halaman dimuat
     document.querySelector('.kategori-btn[data-category="semua"]').click();
+
+    // DITAMBAHKAN KEMBALI: Logika untuk menyembunyikan popup promo
+    const promoPopup = document.getElementById('promo-popup');
+    if(promoPopup) {
+        // Sembunyikan popup setelah 5 detik
+        setTimeout(() => {
+            promoPopup.style.opacity = '0';
+            // Tunggu transisi selesai sebelum menambahkan kelas hidden
+            setTimeout(() => {
+                promoPopup.style.display = 'none';
+            }, 300); // 300ms sesuai dengan durasi transisi
+        }, 5000);
+    }
 
 });
 </script>
