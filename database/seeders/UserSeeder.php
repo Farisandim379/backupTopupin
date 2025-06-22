@@ -8,11 +8,20 @@ class UserSeeder extends Seeder
 {
     public function run(): void
     {
-        // Membuat satu user default
+        // Membuat Akun Admin
         User::create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+            'name' => 'Admin',
+            'email' => 'admin@topup.in',
             'password' => Hash::make('password'),
+            'role' => 'admin',
+        ]);
+
+        // Membuat Akun Customer Biasa
+        User::create([
+            'name' => 'Hafid',
+            'email' => 'hafid@gmail.com',
+            'password' => Hash::make('password'),
+            'role' => 'user', // Defaultnya sudah user, tapi lebih baik eksplisit
         ]);
     }
 }

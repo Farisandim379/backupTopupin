@@ -44,8 +44,12 @@ class LoginController extends Controller
             // This is a security measure to prevent session fixation attacks.
             $request->session()->regenerate();
 
-            // 4. Redirect the user to their intended destination or a default dashboard.
-            return redirect()->intended('/home');
+            // 4. Redirect the user based on their role.
+            if (Auth::user()->role === 'admin') {
+                return redirect()->route('admin.dashboard'); // Arahkan ke dasbor admin
+            }
+
+            return redirect()->intended('/home'); // Arahkan ke home untuk pengguna biasa
         }
 
         // 5. If authentication fails, throw a validation exception.

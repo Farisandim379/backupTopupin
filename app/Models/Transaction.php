@@ -11,7 +11,8 @@ class Transaction extends Model
     use HasFactory;
 
     /**
-     * The attributes that are mass assignable.
+     * DIUBAH: Atribut yang dapat diisi disesuaikan dengan semua kolom
+     * yang dikirim oleh PayoutController.
      *
      * @var array<int, string>
      */
@@ -29,7 +30,7 @@ class Transaction extends Model
     ];
 
     /**
-     * Mendapatkan pengguna yang memiliki transaksi ini.
+     * Sebuah Transaction dimiliki oleh satu User.
      */
     public function user(): BelongsTo
     {

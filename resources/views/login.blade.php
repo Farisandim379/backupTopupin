@@ -4,11 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login Topupin</title>
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
       body {
-        /* Pastikan path ini benar. Letakkan gambar di public/assets/other/Login.png */
         background-image: url("{{ asset('assets/other/Login.png') }}");
         background-size: cover;
         background-position: center;
@@ -36,66 +34,33 @@
 
         <!-- Login Form -->
         <form method="POST" action="{{ route('login.store') }}" class="space-y-4">
-            @csrf <!-- CSRF Token for security -->
-
-            <!-- Email Input -->
+            @csrf
             <div>
-                <input
-                    type="email"
-                    name="email"
-                    placeholder="Alamat Email"
-                    value="{{ old('email') }}"
-                    required
-                    autofocus
-                    class="w-full px-4 py-3 rounded-lg border border-gray-600 bg-transparent text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-lime-400"
-                />
-                <!--
-                    Pesan error inline di sini sudah saya hapus
-                    karena kita akan menggantinya dengan popup SweetAlert.
-                -->
+                <label for="email" class="sr-only">Alamat Email</label>
+                <input type="email" name="email" id="email" placeholder="Alamat Email" value="{{ old('email') }}" required autofocus class="w-full px-4 py-3 rounded-lg border border-gray-600 bg-transparent text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-lime-400">
             </div>
-
-            <!-- Password Input -->
             <div>
-                <input
-                    type="password"
-                    name="password"
-                    placeholder="Kata Sandi"
-                    required
-                    class="w-full px-4 py-3 rounded-lg border border-gray-600 bg-transparent text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-lime-400"
-                />
+                <label for="password" class="sr-only">Kata Sandi</label>
+                <input type="password" name="password" id="password" placeholder="Kata Sandi" required class="w-full px-4 py-3 rounded-lg border border-gray-600 bg-transparent text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-lime-400">
             </div>
-
-            <!-- Remember Me & Forgot Password -->
             <div class="flex items-center justify-between text-sm">
                 <div class="flex items-center gap-2">
-                    <input
-                        type="checkbox"
-                        id="remember"
-                        name="remember"
-                        class="accent-lime-400 h-4 w-4 rounded border-gray-300 text-lime-600 focus:ring-lime-500"
-                    />
+                    <input type="checkbox" id="remember" name="remember" class="accent-lime-400 h-4 w-4 rounded border-gray-300 text-lime-600 focus:ring-lime-500">
                     <label for="remember">Ingat saya</label>
                 </div>
                  <a href="#" class="text-gray-300 hover:underline">Lupa kata sandi?</a>
             </div>
-
-            <!-- Submit Button -->
-            <button
-                type="submit"
-                class="block text-center w-full py-3 rounded-lg bg-lime-400 text-black font-semibold hover:bg-lime-300 transition"
-            >
+            <button type="submit" class="block text-center w-full py-3 rounded-lg bg-lime-400 text-black font-semibold hover:bg-lime-300 transition">
                 Masuk
             </button>
         </form>
 
         <div class="flex items-center gap-2">
             <hr class="flex-grow border-gray-600" />
-            <span class="text-gray-400 text-sm">atau masuk dengan</span>
+            <span class="text-gray-400 text-sm">atau</span>
             <hr class="flex-grow border-gray-600" />
         </div>
 
-        <!-- Social Logins -->
         <div class="flex justify-center gap-4">
             <button class="p-2 bg-gray-700 rounded-full hover:bg-gray-600 transition">
                 <img src="https://placehold.co/24x24/ffffff/000000?text=G" alt="Google" class="w-6 h-6 rounded-full" />
@@ -112,22 +77,35 @@
       </div>
     </div>
 
-    <!-- 1. Include SweetAlert2 library from a CDN -->
+    <!-- SweetAlert2 library -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <!-- 2. Script to check for errors from Laravel and show the popup -->
+    <!-- Script untuk notifikasi error login -->
     @if ($errors->any())
     <script>
         Swal.fire({
             icon: 'error',
             title: 'Login Gagal',
             text: 'Email atau password yang Anda masukkan salah. Silakan coba lagi.',
-            confirmButtonColor: '#84cc16', // Warna tombol konfirmasi (lime-500)
-            background: '#1f2937', // Warna background popup (gray-800)
-            color: '#ffffff' // Warna teks popup (putih)
+            confirmButtonColor: '#84cc16',
+            background: '#1f2937',
+            color: '#ffffff'
         });
     </script>
     @endif
 
+    <!-- Script untuk notifikasi sukses setelah registrasi -->
+    @if (session('success'))
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Registrasi Berhasil!',
+            text: "{{ session('success') }}",
+            confirmButtonColor: '#84cc16',
+            background: '#1f2937',
+            color: '#ffffff'
+        });
+    </script>
+    @endif
 </body>
 </html>

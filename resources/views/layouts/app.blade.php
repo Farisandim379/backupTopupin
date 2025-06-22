@@ -6,10 +6,7 @@
     <title>Topupin - @yield('title', 'Situs Top Up Terpercaya')</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-
-    {{-- DIUBAH: Menambahkan @stack untuk menerima style dari child view --}}
     @stack('styles')
-
     <style>
       .scrollbar-hidden::-webkit-scrollbar { display: none; }
       .animate-slide-down { animation: slideDown 0.3s ease-out; }
@@ -30,7 +27,6 @@
             </div>
 
             <!-- Desktop Menu -->
-            {{-- DIUBAH: Menambahkan padding, rounded, dan transisi pada setiap tautan/tombol --}}
             <div class="hidden md:flex items-center space-x-2">
                 <div class="relative">
                     <input type="text" class="bg-gray-700 text-gray-300 rounded-md px-3 py-2 w-48 focus:outline-none" placeholder="Search..." />
@@ -42,21 +38,13 @@
                     <i class="fas fa-box"></i> Lacak Pesanan
                 </a>
                 @guest
-                    <a href="{{ route('login') }}" class="flex items-center gap-2 px-4 py-2 rounded-md hover:bg-gray-700/50 hover:text-[#D7FD52] transition-colors duration-300">
-                        <i class="fas fa-sign-in-alt"></i> Login
-                    </a>
-                    <a href="{{ route('register') }}" class="flex items-center gap-2 px-4 py-2 rounded-md hover:bg-gray-700/50 hover:text-[#D7FD52] transition-colors duration-300">
-                        <i class="fas fa-user-plus"></i> Daftar
-                    </a>
+                    <a href="{{ route('login') }}" class="flex items-center gap-2 px-4 py-2 rounded-md hover:bg-gray-700/50 hover:text-[#D7FD52] transition-colors duration-300"><i class="fas fa-sign-in-alt"></i> Login</a>
+                    <a href="{{ route('register') }}" class="flex items-center gap-2 px-4 py-2 rounded-md hover:bg-gray-700/50 hover:text-[#D7FD52] transition-colors duration-300"><i class="fas fa-user-plus"></i> Daftar</a>
                 @else
-                    <a href="#" class="flex items-center gap-2 px-4 py-2 rounded-md hover:bg-gray-700/50 hover:text-[#D7FD52] transition-colors duration-300">
-                        <i class="fas fa-user"></i> {{ Auth::user()->name }}
-                    </a>
+                    <a href="#" class="flex items-center gap-2 px-4 py-2 rounded-md hover:bg-gray-700/50 hover:text-[#D7FD52] transition-colors duration-300"><i class="fas fa-user"></i> {{ Auth::user()->name }}</a>
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
-                        <button type="submit" class="flex items-center gap-2 px-4 py-2 rounded-md hover:bg-gray-700/50 hover:text-[#D7FD52] transition-colors duration-300">
-                            <i class="fas fa-sign-out-alt"></i> Logout
-                        </button>
+                        <button type="submit" class="flex items-center gap-2 px-4 py-2 rounded-md hover:bg-gray-700/50 hover:text-[#D7FD52] transition-colors duration-300"><i class="fas fa-sign-out-alt"></i> Logout</button>
                     </form>
                 @endguest
             </div>
@@ -71,7 +59,7 @@
     <!-- Mobile Dropdown Menu -->
     <div id="dropdownMenu" class="fixed top-16 left-0 w-full bg-[#242424] text-white z-40 hidden animate-slide-down">
       <div class="flex flex-col px-6 py-4 space-y-4 border-t border-gray-700">
-        {{-- Konten dropdown mobile bisa Anda isi di sini, mirip dengan menu desktop --}}
+        {{-- Konten dropdown mobile --}}
       </div>
     </div>
 
@@ -82,33 +70,41 @@
 
     <!-- Footer -->
     <footer class="bg-[#242424] mt-10 w-full">
-      <div class="px-4 sm:px-6 lg:px-8 py-8">
-        <div class="flex flex-col md:flex-row justify-between mb-6">
-            <!-- Left -->
-            <div class="mb-4 md:mb-0">
-                <div class="text-xl font-bold mb-1 text-white font-sans">Topup<span class="text-[#D7FD52]">in</span></div>
-                <div class="text-sm text-gray-400 font-sans">Game Voucher</div>
-            </div>
-
-            <!-- Right -->
-            <div class="text-right">
-                <div class="text-sm font-semibold mb-2 text-white font-sans">Metode Pembayaran</div>
-                {{-- Payment methods icons can be placed here --}}
-            </div>
-        </div>
-
-        <!-- Footer bawah -->
-        <div class="border-t border-gray-800 pt-4 flex flex-wrap gap-4 justify-center md:justify-start text-xs text-gray-500 font-sans">
-            <span>©{{ date('Y') }}</span> <span>Privacy</span> <span>Terms</span> <span>Sitemap</span> <span>Blog</span>
-        </div>
-      </div>
+      {{-- ... Konten Footer ... --}}
     </footer>
+
+    {{-- SweetAlert2 Library --}}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
       function toggleDropdown() {
         const menu = document.getElementById("dropdownMenu");
         menu.classList.toggle("hidden");
       }
+
+      // DIUBAH: Menambahkan script untuk menampilkan notifikasi sukses
+      @if(session('success'))
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: "{{ session('success') }}",
+            confirmButtonColor: '#84cc16',
+            background: '#1f2937',
+            color: '#ffffff'
+        });
+      @endif
+
+      // Menampilkan notifikasi error jika ada
+      @if(session('error'))
+        Swal.fire({
+            icon: 'error',
+            title: 'Gagal!',
+            text: "{{ session('error') }}",
+            confirmButtonColor: '#ef4444',
+            background: '#1f2937',
+            color: '#ffffff'
+        });
+      @endif
     </script>
 </body>
 </html>
