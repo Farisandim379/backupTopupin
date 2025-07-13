@@ -18,22 +18,22 @@
 </head>
 <body class="bg-black text-white font-sans">
 
+    <!-- Navbar -->
     <nav class="bg-[#242424] p-3 border-b border-gray-800 text-white fixed top-0 w-full z-50">
         <div class="flex justify-between items-center px-4 sm:px-6 lg:px-8">
             <div class="text-lg font-bold">
                 <a href="{{ route('home') }}">Topup<span class="text-[#D7FD52]">in</span></a>
             </div>
-
             <div class="hidden md:flex items-center space-x-2">
                 <div class="relative">
                     <input type="text" class="bg-gray-700 text-gray-300 rounded-md px-3 py-2 w-48 focus:outline-none" placeholder="Search..." />
-                    <button class="absolute right-2 top-1/2 transform -translate-y-1/2">
-                        <i class="fas fa-search text-gray-400"></i>
-                    </button>
+                    <button class="absolute right-2 top-1/2 transform -translate-y-1/2"><i class="fas fa-search text-gray-400"></i></button>
                 </div>
-                <a href="#" class="flex items-center gap-2 px-4 py-2 rounded-md hover:bg-gray-700/50 hover:text-[#D7FD52] transition-colors duration-300">
-                    <i class="fas fa-box"></i> Lacak Pesanan
+                @auth
+                <a href="{{ route('user.transactions') }}" class="flex items-center gap-2 px-4 py-2 rounded-md hover:bg-gray-700/50 hover:text-[#D7FD52] transition-colors duration-300">
+                    <i class="fas fa-box"></i> Riwayat Transaksi
                 </a>
+                @endauth
                 @guest
                     <a href="{{ route('login') }}" class="flex items-center gap-2 px-4 py-2 rounded-md hover:bg-gray-700/50 hover:text-[#D7FD52] transition-colors duration-300"><i class="fas fa-sign-in-alt"></i> Login</a>
                     <a href="{{ route('register') }}" class="flex items-center gap-2 px-4 py-2 rounded-md hover:bg-gray-700/50 hover:text-[#D7FD52] transition-colors duration-300"><i class="fas fa-user-plus"></i> Daftar</a>
@@ -45,13 +45,15 @@
                     </form>
                 @endguest
             </div>
-
-            <button id="burgerBtn" class="md:hidden block focus:outline-none" aria-label="Open main menu"> <i class="fas fa-bars text-xl"></i>
+            {{-- DIUBAH: Diberi ID untuk target JavaScript --}}
+            <button id="burgerBtn" class="md:hidden block focus:outline-none" aria-label="Open main menu">
+                <i class="fas fa-bars text-xl"></i>
             </button>
         </div>
     </nav>
 
-    <div id="dropdownMenu" class="fixed top-[60px] left-0 w-full bg-[#242424] text-white z-50 hidden animate-slide-down">
+    <!-- Mobile Dropdown Menu -->
+    <div id="dropdownMenu" class="fixed top-[60px] left-0 w-full bg-[#242424] text-white z-40 hidden animate-slide-down">
       <div class="flex flex-col px-4 py-4 space-y-2 border-t border-gray-700">
           <div class="relative w-full mb-2">
               <input type="text" class="bg-gray-700 text-gray-300 rounded-md px-3 py-2 w-full focus:outline-none" placeholder="Cari game atau produk..." />
@@ -59,11 +61,12 @@
                   <i class="fas fa-search text-gray-400"></i>
               </button>
           </div>
-
-          <a href="#" class="flex items-center gap-3 px-3 py-3 rounded-md hover:bg-gray-700/50 hover:text-[#D7FD52] transition-colors duration-300">
+          @auth
+          <a href="{{ route('user.transactions') }}" class="flex items-center gap-3 px-3 py-3 rounded-md hover:bg-gray-700/50 hover:text-[#D7FD52] transition-colors duration-300">
               <i class="fas fa-box w-5"></i>
-              <span>Lacak Pesanan</span>
+              <span>Riwayat Transaksi</span>
           </a>
+          @endauth
           @guest
               <a href="{{ route('login') }}" class="flex items-center gap-3 px-3 py-3 rounded-md hover:bg-gray-700/50 hover:text-[#D7FD52] transition-colors duration-300">
                   <i class="fas fa-sign-in-alt w-5"></i>
@@ -89,8 +92,8 @@
       </div>
     </div>
 
-
-    <main class="mt-20 px-4"> @yield('content')
+    <main class="mt-20 px-4">
+        @yield('content')
     </main>
 
     <footer class="bg-[#242424] mt-10 w-full">
@@ -103,19 +106,23 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
-      // DIUBAH: Script toggle dropdown dipindahkan ke event listener agar lebih rapi dan fungsional
-      const burgerBtn = document.getElementById('burgerBtn');
-      const menu = document.getElementById('dropdownMenu');
+      // DIUBAH: Script toggle dropdown sekarang menggunakan event listener yang lebih modern
+      document.addEventListener('DOMContentLoaded', () => {
+        const burgerBtn = document.getElementById('burgerBtn');
+        const menu = document.getElementById('dropdownMenu');
 
-      burgerBtn.addEventListener('click', (event) => {
-        event.stopPropagation(); // Mencegah event "click" menyebar ke window
-        menu.classList.toggle('hidden');
-      });
+        if(burgerBtn && menu) {
+            burgerBtn.addEventListener('click', (event) => {
+                event.stopPropagation();
+                menu.classList.toggle('hidden');
+            });
 
-      // Bonus: Menutup dropdown saat klik di luar area menu
-      window.addEventListener('click', (e) => {
-        if (!menu.classList.contains('hidden') && !menu.contains(e.target)) {
-          menu.classList.add('hidden');
+            // Bonus: Menutup dropdown saat klik di luar area menu
+            window.addEventListener('click', (e) => {
+                if (!menu.classList.contains('hidden') && !menu.contains(e.target) && e.target !== burgerBtn) {
+                menu.classList.add('hidden');
+                }
+            });
         }
       });
 
@@ -123,7 +130,7 @@
         Swal.fire({
             icon: 'success',
             title: 'Berhasil!',
-            text: "{{ session('success') }}",
+            text: @json(session('success')),
             confirmButtonColor: '#84cc16',
             background: '#1f2937',
             color: '#ffffff'
@@ -134,7 +141,7 @@
         Swal.fire({
             icon: 'error',
             title: 'Gagal!',
-            text: "{{ session('error') }}",
+            text: @json(session('error')),
             confirmButtonColor: '#ef4444',
             background: '#1f2937',
             color: '#ffffff'

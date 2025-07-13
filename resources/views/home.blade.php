@@ -39,7 +39,6 @@
         <div class="flex justify-start gap-1 sm:gap-2">
             <a href="#" data-category="semua" class="kategori-btn flex-1 sm:flex-none sm:w-28 bg-lime-400 text-black px-1 sm:px-4 py-2 rounded-md text-xs sm:text-sm text-center font-medium truncate">SEMUA</a>
             <a href="#" data-category="topup" class="kategori-btn flex-1 sm:flex-none sm:w-28 bg-zinc-800 text-white px-1 sm:px-4 py-2 rounded-md text-xs sm:text-sm text-center font-medium truncate transition">TOP UP</a>
-            <a href="#" data-category="akun" class="kategori-btn flex-1 sm:flex-none sm:w-28 bg-zinc-800 text-white px-1 sm:px-4 py-2 rounded-md text-xs sm:text-sm text-center font-medium truncate transition">AKUN</a>
             <a href="#" data-category="tim" class="kategori-btn flex-1 sm:flex-none sm:w-28 bg-zinc-800 text-white px-1 sm:px-4 py-2 rounded-md text-xs sm:text-sm text-center font-medium truncate transition">TIM</a>
         </div>
     </div>

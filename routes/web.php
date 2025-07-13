@@ -8,6 +8,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PayoutController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\TopupItemController;
+use App\Http\Controllers\UserTransactionController; // <-- Ditambahkan
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\TransactionController;
 
@@ -18,15 +19,8 @@ use App\Http\Controllers\Admin\TransactionController;
 */
 
 // --- Rute Publik ---
-
-// DIUBAH: Rute utama sekarang mengarah ke /home
 Route::get('/home', [HomeController::class, 'index'])->name('home');
-
-// DIUBAH: Rute root (/) sekarang akan mengarahkan ke /home
-Route::get('/', function () {
-    return redirect()->route('home');
-});
-
+Route::get('/', function () { return redirect()->route('home'); });
 Route::get('/order/{game:slug}', [PayoutController::class, 'create'])->name('payout.create');
 
 
@@ -43,6 +37,9 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [LoginController::class, 'destroy'])->name('logout');
     Route::post('/order', [PayoutController::class, 'store'])->name('payout.store');
+
+    // DIUBAH: Menambahkan rute untuk riwayat transaksi pengguna
+    Route::get('/my-transactions', [UserTransactionController::class, 'index'])->name('user.transactions');
 });
 
 
