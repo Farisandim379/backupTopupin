@@ -14,32 +14,64 @@ class TopupItemSeeder extends Seeder
      */
     public function run(): void
     {
-        // 1. Cari ID untuk game Valorant
-        $valorantGame = Game::where('slug', 'valorant')->first();
+        // Hapus data lama agar tidak duplikat
+        TopupItem::truncate();
 
-        // 2. Jika Valorant ditemukan, tambahkan item top-up-nya
+        // --- Data untuk Valorant ---
+        $valorantGame = Game::where('slug', 'valorant')->first();
         if ($valorantGame) {
             $items = [
-                ['name' => '53 VP', 'price' => 14500],
-                ['name' => '154 VP', 'price' => 28500],
-                ['name' => '256 VP', 'price' => 45000],
-                ['name' => '503 VP', 'price' => 70000],
-                ['name' => '1010 VP', 'price' => 140000],
-                ['name' => '2020 VP', 'price' => 280000],
-                ['name' => '3330 VP', 'price' => 350000],
-                ['name' => '4440 VP', 'price' => 450000],
-                ['name' => '8880 VP', 'price' => 725000],
+                ['name' => '53 VP', 'price' => 14500, 'image' => 'valorant.jpg'],
+                ['name' => '154 VP', 'price' => 28500, 'image' => 'valorant.jpg'],
+                ['name' => '256 VP', 'price' => 45000, 'image' => 'valorant.jpg'],
+                ['name' => '503 VP', 'price' => 70000, 'image' => 'valorant.jpg'],
+                ['name' => '1010 VP', 'price' => 140000, 'image' => 'valorant.jpg'],
+                ['name' => '2020 VP', 'price' => 280000, 'image' => 'valorant.jpg'],
             ];
-
             foreach ($items as $item) {
                 TopupItem::create([
                     'game_id' => $valorantGame->id,
                     'name' => $item['name'],
                     'price' => $item['price'],
+                    'image' => $item['image'],
                 ]);
             }
         }
 
-        // Anda bisa menambahkan item untuk game lain di sini dengan logika yang sama
+        // --- Data untuk Mobile Legends ---
+        $mlGame = Game::where('slug', 'mobile-legends')->first();
+        if ($mlGame) {
+            $items = [
+                ['name' => '86 Diamonds', 'price' => 25000, 'image' => 'diamondml.jpg'],
+                ['name' => '172 Diamonds', 'price' => 50000, 'image' => 'diamondml.jpg'],
+                ['name' => '257 Diamonds', 'price' => 75000, 'image' => 'diamondml.jpg'],
+            ];
+            foreach ($items as $item) {
+                TopupItem::create([
+                    'game_id' => $mlGame->id,
+                    'name' => $item['name'],
+                    'price' => $item['price'],
+                    'image' => $item['image'],
+                ]);
+            }
+        }
+
+        // --- Data untuk Clash of Clans ---
+        $cocGame = Game::where('slug', 'clash-of-clans')->first();
+        if ($cocGame) {
+            $items = [
+                ['name' => '80 Gems', 'price' => 15000, 'image' => 'diamondcoc.png'],
+                ['name' => '500 Gems', 'price' => 79000, 'image' => 'diamondcoc.png'],
+                ['name' => '1200 Gems', 'price' => 159000, 'image' => 'diamondcoc.png'],
+            ];
+            foreach ($items as $item) {
+                TopupItem::create([
+                    'game_id' => $cocGame->id,
+                    'name' => $item['name'],
+                    'price' => $item['price'],
+                    'image' => $item['image'],
+                ]);
+            }
+        }
     }
 }

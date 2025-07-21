@@ -12,7 +12,7 @@
     </div>
     <div class="bg-black text-white p-4 rounded flex flex-col sm:flex-row items-center mb-5">
         <div class="mr-0 sm:mr-4 mb-4 sm:mb-0">
-            <img src="{{ asset('assets/logogame/' . $game->thumbnail) }}" alt="{{ $game->name }} Logo" class="w-20 h-20 rounded">
+            <img src="{{ asset('assets/logogame/' . $game->logo) }}" alt="{{ $game->name }} Logo" class="w-20 h-20 rounded">
         </div>
         <div class="text-center sm:text-left">
             <h1 class="text-lg font-bold">{{ $game->name }}</h1>
@@ -38,7 +38,10 @@
                                 <input type="radio" name="topup_item_id" value="{{ $item->id }}" class="hidden peer" data-price="{{ $item->price }}" data-amount="{{ $item->name }}">
                                 {{-- Tampilan kartu yang bisa diklik --}}
                                 <div class="nominal-card border border-gray-600 bg-[#242424] rounded-lg cursor-pointer peer-checked:ring-2 peer-checked:ring-[#D7FD52]">
-                                    <div class="p-4 flex justify-center"><img src="{{ asset('assets/diamondgame/diamondcalo.png') }}" alt="Item" class="w-12 h-12"></div>
+                                    {{-- DIUBAH: Path gambar sekarang dinamis --}}
+                                    <div class="p-4 flex justify-center">
+                                        <img src="{{ $item->image ? asset('assets/diamondgame/' . $item->image) : asset('assets/diamondgame/default.png') }}" alt="{{ $item->name }}" class="w-12 h-12">
+                                    </div>
                                     <div class="p-2 text-center text-sm">{{ $item->name }}</div>
                                     <div class="bg-[#D7FD52] text-black text-center p-1 rounded-b-lg font-semibold">Rp{{ number_format($item->price, 0, ',', '.') }}</div>
                                 </div>

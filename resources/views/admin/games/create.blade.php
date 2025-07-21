@@ -32,6 +32,10 @@
             <input type="file" id="thumbnail" name="thumbnail" class="bg-[#242424] border border-gray-600 text-white text-sm rounded-lg block w-full">
             <p class="mt-1 text-xs text-gray-400">File gambar (jpg, png, jpeg). Letakkan di `public/assets/logogame/`.</p>
         </div>
+        <div>
+            <label for="logo" class="block mb-2 text-sm font-medium text-gray-300">Logo (untuk Halaman Pembayaran)</label>
+            <input type="file" id="logo" name="logo" class="bg-[#242424] border border-gray-600 ...">
+        </div>
 
         <div>
             <label class="block mb-2 text-sm font-medium text-gray-300">Membutuhkan Server/Zone ID?</label>

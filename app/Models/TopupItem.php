@@ -13,6 +13,7 @@ class TopupItem extends Model
         'game_id',
         'name',
         'price',
+        'image',
     ];
 
     public function game(): BelongsTo

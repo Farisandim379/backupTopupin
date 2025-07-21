@@ -3,7 +3,7 @@
 @section('title', 'Tambah Item Baru')
 
 @section('content')
-    <form action="{{ route('admin.topup-items.store') }}" method="POST" class="space-y-6">
+    <form action="{{ route('admin.topup-items.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
         @csrf
 
         @if ($errors->any())
@@ -17,7 +17,8 @@
             <select id="game_id" name="game_id" class="bg-[#242424] border border-gray-600 text-white text-sm rounded-lg focus:ring-lime-500 focus:border-lime-500 block w-full p-2.5" required>
                 <option selected disabled>-- Pilih Game --</option>
                 @foreach($games as $game)
-                    <option value="{{ $game->id }}">{{ $game->name }}</option>
+                    {{-- Menggunakan old('game_id') untuk mempertahankan pilihan jika validasi gagal --}}
+                    <option value="{{ $game->id }}" {{ old('game_id') == $game->id ? 'selected' : '' }}>{{ $game->name }}</option>
                 @endforeach
             </select>
         </div>
@@ -30,6 +31,11 @@
         <div>
             <label for="price" class="block mb-2 text-sm font-medium text-gray-300">Harga (cth: 100000)</label>
             <input type="number" id="price" name="price" value="{{ old('price') }}" class="bg-[#242424] border border-gray-600 text-white text-sm rounded-lg focus:ring-lime-500 focus:border-lime-500 block w-full p-2.5" required>
+        </div>
+
+        <div>
+            <label for="image" class="block mb-2 text-sm font-medium text-gray-300">Gambar Item (Opsional)</label>
+            <input type="file" id="image" name="image" class="bg-[#242424] border border-gray-600 text-white text-sm rounded-lg block w-full">
         </div>
 
         <div class="flex justify-end gap-4">

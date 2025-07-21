@@ -13,6 +13,7 @@ class Game extends Model
         'name',
         'slug',
         'thumbnail',
+        'logo',
         'needs_server_id',
     ];
 

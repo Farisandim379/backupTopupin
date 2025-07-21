@@ -14,7 +14,6 @@ class GameController extends Controller
      */
     public function index()
     {
-        // Kembalikan kode ini ke keadaan semula
         $games = Game::all();
         return view('admin.games.index', compact('games'));
     }
@@ -35,7 +34,8 @@ class GameController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'slug' => 'nullable|string|max:255|unique:games',
-            'thumbnail' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'thumbnail' => 'required|image|mimes:jpeg,png,jpg,gif,webp,JPG|max:2048',
+            'logo' => 'required|image|mimes:jpeg,png,jpg,gif,webp,JPG|max:2048',
             'needs_server_id' => 'required|boolean',
         ]);
 
@@ -45,9 +45,16 @@ class GameController extends Controller
 
         if ($request->hasFile('thumbnail')) {
             $file = $request->file('thumbnail');
-            $filename = time() . '_' . Str::slug($game->name) . '.' . $file->getClientOriginalExtension();
+            $filename = 'thumbnail_'.time().'.'.$file->getClientOriginalExtension();
             $file->move(public_path('assets/logogame'), $filename);
             $game->thumbnail = $filename;
+        }
+
+        if ($request->hasFile('logo')) {
+            $file = $request->file('logo');
+            $filename = 'logo_'.time().'.'.$file->getClientOriginalExtension();
+            $file->move(public_path('assets/diamondgame'), $filename);
+            $game->logo = $filename;
         }
 
         $game->needs_server_id = $request->needs_server_id;
@@ -72,7 +79,8 @@ class GameController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'slug' => 'nullable|string|max:255|unique:games,slug,' . $game->id,
-            'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp,JPG|max:2048',
+            'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp,JPG|max:2048',
             'needs_server_id' => 'required|boolean',
         ]);
 
@@ -80,14 +88,23 @@ class GameController extends Controller
         $game->slug = $request->slug ? Str::slug($request->slug, '-') : Str::slug($request->name, '-');
 
         if ($request->hasFile('thumbnail')) {
-            if ($game->thumbnail && File::exists(public_path('assets/logogame/' . $game->thumbnail))) {
-                File::delete(public_path('assets/logogame/' . $game->thumbnail));
+            if ($game->thumbnail && File::exists(public_path('assets/imgPopuler/' . $game->thumbnail))) {
+                File::delete(public_path('assets/imgPopuler/' . $game->thumbnail));
             }
-
             $file = $request->file('thumbnail');
-            $filename = time() . '_' . Str::slug($game->name) . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('assets/logogame'), $filename);
+            $filename = 'thumbnail_'.time().'.'.$file->getClientOriginalExtension();
+            $file->move(public_path('assets/imgPopuler'), $filename);
             $game->thumbnail = $filename;
+        }
+
+        if ($request->hasFile('logo')) {
+            if ($game->logo && File::exists(public_path('assets/logogame/' . $game->logo))) {
+                File::delete(public_path('assets/logogame/' . $game->logo));
+            }
+            $file = $request->file('logo');
+            $filename = 'logo_'.time().'.'.$file->getClientOriginalExtension();
+            $file->move(public_path('assets/logogame'), $filename);
+            $game->logo = $filename;
         }
 
         $game->needs_server_id = $request->needs_server_id;
@@ -101,8 +118,12 @@ class GameController extends Controller
      */
     public function destroy(Game $game)
     {
-        if ($game->thumbnail && File::exists(public_path('assets/logogame/' . $game->thumbnail))) {
-            File::delete(public_path('assets/logogame/' . $game->thumbnail));
+        // DIUBAH: Memperbaiki path untuk menghapus file thumbnail dan logo
+        if ($game->thumbnail && File::exists(public_path('assets/imgPopuler/' . $game->thumbnail))) {
+            File::delete(public_path('assets/imgPopuler/' . $game->thumbnail));
+        }
+        if ($game->logo && File::exists(public_path('assets/logogame/' . $game->logo))) {
+            File::delete(public_path('assets/logogame/' . $game->logo));
         }
 
         $game->delete();

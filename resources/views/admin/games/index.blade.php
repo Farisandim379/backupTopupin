@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+    @extends('layouts.admin')
 
 @section('title', 'Manage Games')
 
@@ -50,7 +50,8 @@
             <thead class="bg-[#242424] text-gray-300">
                 <tr>
                     <th class="p-3 text-left">ID</th>
-                    <th class="p-3 text-left">Thumbnail</th>
+                    <th class="p-3 text-left">Thumbnail (Home)</th>
+                    <th class="p-3 text-left">Logo (Payout)</th>
                     <th class="p-3 text-left">Nama</th>
                     <th class="p-3 text-left">Slug</th>
                     <th class="p-3 text-center">Butuh Server ID</th>
@@ -58,11 +59,23 @@
                 </tr>
             </thead>
             <tbody>
-                @forelse ($games as $game)
+                 @forelse ($games as $game)
                     <tr class="border-b border-gray-800">
                         <td class="p-3">{{ $game->id }}</td>
+                        {{-- DIUBAH: Menampilkan kedua gambar --}}
                         <td class="p-3">
-                            <img src="{{ asset('assets/logogame/' . $game->thumbnail) }}" alt="{{ $game->name }}" class="w-12 h-12 rounded object-cover">
+                            @if($game->thumbnail)
+                                <img src="{{ asset('assets/logogame/' . $game->thumbnail) }}" alt="Thumbnail {{ $game->name }}" class="w-24 h-14 rounded object-cover">
+                            @else
+                                <span class="text-xs text-gray-500">N/A</span>
+                            @endif
+                        </td>
+                        <td class="p-3">
+                             @if($game->logo)
+                                <img src="{{ asset('assets/diamondgame/' . $game->logo) }}" alt="Logo {{ $game->name }}" class="w-12 h-12 rounded object-cover">
+                            @else
+                                <span class="text-xs text-gray-500">N/A</span>
+                            @endif
                         </td>
                         <td class="p-3 font-semibold">{{ $game->name }}</td>
                         <td class="p-3 font-mono text-gray-400">{{ $game->slug }}</td>
@@ -86,7 +99,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="6" class="p-3 text-center text-gray-400">Belum ada data game.</td>
+                        <td colspan="7" class="p-3 text-center text-gray-400">Belum ada data game.</td>
                     </tr>
                 @endforelse
             </tbody>

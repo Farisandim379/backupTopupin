@@ -20,6 +20,7 @@ class GameSeeder extends Seeder
             'name' => 'Valorant',
             'slug' => 'valorant',
             'thumbnail' => 'logovalo.png', // Menggunakan logo kecil
+            'logo' => 'valorant.jpg',
             'needs_server_id' => false,
         ]);
 
@@ -27,6 +28,7 @@ class GameSeeder extends Seeder
             'name' => 'Clash of Clans',
             'slug' => 'clash-of-clans',
             'thumbnail' => 'logococ.png', // Menggunakan logo kecil
+            'logo' => 'clashofclans.jpg',
             'needs_server_id' => false,
         ]);
 
@@ -34,6 +36,7 @@ class GameSeeder extends Seeder
             'name' => 'Mobile Legends',
             'slug' => 'mobile-legends',
             'thumbnail' => 'logomobile.png', // Menggunakan logo kecil
+            'logo' => 'mobilelegends.jpg',
             'needs_server_id' => true,
         ]);
 
@@ -41,28 +44,32 @@ class GameSeeder extends Seeder
             'name' => 'Genshin Impact',
             'slug' => 'genshin-impact',
             'thumbnail' => 'genshinimpact.jpg', // Disesuaikan dengan file Anda
+            'logo' => 'genshintopup.jpeg',
             'needs_server_id' => true,
         ]);
 
         Game::create([
             'name' => 'Free Fire',
             'slug' => 'free-fire',
-            'thumbnail' => 'logoepep.png', // Disesuaikan dengan file Anda
+            'thumbnail' => 'freefire.jpg', // Disesuaikan dengan file Anda
+            'logo' => 'logoepep.png',
             'needs_server_id' => false,
         ]);
 
         Game::create([
             'name' => 'Roblox',
             'slug' => 'roblox',
-            'thumbnail' => 'logoroblox.png', // Disesuaikan dengan file Anda
+            'thumbnail' => 'roblox.jpg', // Disesuaikan dengan file Anda
+            'logo' => 'logoroblox.png',
             'needs_server_id' => false,
         ]);
 
         Game::create([
-            'name' => 'Minecraft',
-            'slug' => 'minecraft',
-            'thumbnail' => 'imgpopuler2.png', // Ini bisa jadi berbeda folder
-            'needs_server_id' => false,
+            'name' => 'PUBG Mobile',
+            'slug' => 'pubg',
+            'thumbnail' => 'logopubg.png', // Ini bisa jadi berbeda folder
+            'logo' => 'pubgmobile.jpg',
+            'needs_server_id' => true,
         ]);
     }
 }

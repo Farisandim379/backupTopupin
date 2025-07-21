@@ -28,6 +28,11 @@
             <input type="text" id="slug" name="slug" value="{{ old('slug', $game->slug) }}" class="bg-[#242424] border border-gray-600 text-white text-sm rounded-lg focus:ring-lime-500 focus:border-lime-500 block w-full p-2.5">
         </div>
 
+         <div>
+            <label for="logo" class="block mb-2 text-sm font-medium text-gray-300">Logo (untuk Halaman Pembayaran)</label>
+            <input type="file" id="logo" name="logo" class="bg-[#242424] border border-gray-600 ...">
+        </div>
+
         <div>
             <label for="thumbnail" class="block mb-2 text-sm font-medium text-gray-300">Thumbnail (Logo Game)</label>
             <div class="flex items-center gap-4">

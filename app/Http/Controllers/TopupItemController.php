@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Game;
 use App\Models\TopupItem;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 
 class TopupItemController extends Controller
 {
@@ -13,8 +14,6 @@ class TopupItemController extends Controller
      */
     public function index()
     {
-        // Mengambil semua item beserta data game yang berelasi
-        // untuk menghindari query N+1
         $topupItems = TopupItem::with('game')->get();
         return view('admin.topup-items.index', compact('topupItems'));
     }
@@ -24,7 +23,6 @@ class TopupItemController extends Controller
      */
     public function create()
     {
-        // Kita perlu mengambil semua data game untuk ditampilkan di dropdown
         $games = Game::all();
         return view('admin.topup-items.create', compact('games'));
     }
@@ -34,13 +32,26 @@ class TopupItemController extends Controller
      */
     public function store(Request $request)
     {
+        // DIUBAH: Aturan validasi untuk 'image' dibuat lebih spesifik
         $request->validate([
             'game_id' => 'required|exists:games,id',
             'name' => 'required|string|max:255',
             'price' => 'required|integer|min:0',
+            // Aturan ini berarti 'image' boleh kosong (nullable),
+            // tapi JIKA ADA, ia harus berupa gambar dengan format yang diizinkan.
+            'image' => 'nullable|image|mimes:png,jpg,jpeg,webp',
         ]);
 
-        TopupItem::create($request->all());
+        $data = $request->all();
+
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $filename = 'item_'.time().'.'.$file->getClientOriginalExtension();
+            $file->move(public_path('assets/diamondgame'), $filename);
+            $data['image'] = $filename;
+        }
+
+        TopupItem::create($data);
 
         return redirect()->route('admin.topup-items.index')
                          ->with('success', 'Item top up berhasil ditambahkan.');
@@ -48,31 +59,40 @@ class TopupItemController extends Controller
 
     /**
      * Menampilkan form untuk mengedit item.
-     *
-     * @param  \App\Models\TopupItem  $topupItem
      */
     public function edit(TopupItem $topupItem)
     {
-        // Mengambil semua game untuk dropdown
         $games = Game::all();
         return view('admin.topup-items.edit', compact('topupItem', 'games'));
     }
 
     /**
      * Memperbarui data item di database.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\TopupItem  $topupItem
      */
     public function update(Request $request, TopupItem $topupItem)
     {
+        // DIUBAH: Aturan validasi untuk 'image' disesuaikan
         $request->validate([
             'game_id' => 'required|exists:games,id',
             'name' => 'required|string|max:255',
             'price' => 'required|integer|min:0',
+            'image' => 'nullable|image|mimes:png,jpg,jpeg,webp',
         ]);
 
-        $topupItem->update($request->all());
+        $data = $request->all();
+
+        if ($request->hasFile('image')) {
+            if ($topupItem->image && File::exists(public_path('assets/diamondgame/' . $topupItem->image))) {
+                File::delete(public_path('assets/diamondgame/' . $topupItem->image));
+            }
+
+            $file = $request->file('image');
+            $filename = 'item_'.time().'.'.$file->getClientOriginalExtension();
+            $file->move(public_path('assets/diamondgame'), $filename);
+            $data['image'] = $filename;
+        }
+
+        $topupItem->update($data);
 
         return redirect()->route('admin.topup-items.index')
                          ->with('success', 'Item top up berhasil diperbarui.');
@@ -80,11 +100,13 @@ class TopupItemController extends Controller
 
     /**
      * Menghapus item dari database.
-     *
-     * @param  \App\Models\TopupItem  $topupItem
      */
     public function destroy(TopupItem $topupItem)
     {
+        if ($topupItem->image && File::exists(public_path('assets/diamondgame/' . $topupItem->image))) {
+            File::delete(public_path('assets/diamondgame/' . $topupItem->image));
+        }
+
         $topupItem->delete();
 
         return redirect()->route('admin.topup-items.index')
