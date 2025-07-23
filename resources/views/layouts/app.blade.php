@@ -157,7 +157,7 @@
                         resultsContainer.style.display = 'block';
                         data.forEach(game => {
                             const resultLink = document.createElement('a');
-                            resultLink.href = `/store/${game.slug}`;
+                            resultLink.href = `/order/${game.slug}`;
                             resultLink.className = 'flex items-center p-3 hover:bg-gray-700/50 transition-colors duration-200 cursor-pointer';
 
                             const image = document.createElement('img');
